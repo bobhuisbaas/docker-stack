@@ -1,0 +1,62 @@
+- name: Startpage
+  width: wide
+  hide-desktop-navigation: false
+  center-vertically: true
+  
+  #searchbar
+  head-widgets:
+    - type: search
+      engine: duckduckgo
+      newtab: true
+      autofocus: true
+  
+  columns:
+   
+    - size: small
+      widgets:
+        - type: to-do
+        - type: weather
+          units: metric
+          location: Eindhoven, Noord-Brabant, NL
+          api-key: ${readFileFromEnv:/app/secrets/openweathermap_api_key}
+
+      # middle column
+    - size: full
+      widgets:
+          # services monitor      
+        - type: monitor
+          cache: 1m
+          title: Services
+          sites:
+            - title: PiHole
+              url: https://pihole.derooijtransportinfra.nl/admin/
+              icon: si:pihole
+            - title: Code Server
+              url: https://code.derooijtransportinfra.nl
+              icon: si:visualstudiocode
+            - title: Home Assistant
+              url: https://ha.derooijtransportinfra.nl
+              icon: si:homeassistant
+            - title: Grafana
+              url: https://monitor.derooijtransportinfra.nl
+              icon: si:grafana
+
+      # right column
+    - size: small
+      widgets:
+          # bookmarks
+        - type: bookmarks
+          groups:
+            - title: Links
+              links:
+                - title: GitHub
+                  url: https://github.com/
+                - title: YouTube
+                  url: https://www.youtube.com/
+                - title: Gmail
+                  url: https://mail.google.com/
+          # dns stats
+        - type: dns-stats
+          service: pihole-v6
+          url: https://pihole.derooijtransportinfra.nl
+          password: ${readFileFromEnv:/app/secrets/pihole_password}

@@ -1,0 +1,103 @@
+services:
+  traefik:
+    image: traefik:v2.11
+    container_name: traefik
+    restart: unless-stopped
+    command:
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.filename=/etc/traefik/dynamic.yml"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./traefik/dynamic.yml:/etc/traefik/dynamic.yml:ro"
+      - "./traefik/certs:/certs:ro"
+    networks:
+      - web
+
+  glance:
+    image: glanceapp/glance
+    container_name: glance
+    restart: unless-stopped
+    volumes:
+      - ./glance/config:/app/config
+      - ./glance/assets:/app/assets
+      - ./glance/secrets:/app/secrets
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PIHOLE_PASSWORD=${PIHOLE_PASSWORD}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.glance.rule=Host(`dash.derooijtransportinfra.nl`)"
+      - "traefik.http.routers.glance.entrypoints=websecure"
+      - "traefik.http.routers.glance.tls=true"
+      - "traefik.http.services.glance.loadbalancer.server.port=8080"
+    networks:
+      - web
+
+  codeserver:
+    image: linuxserver/code-server
+    container_name: codeserver
+    restart: unless-stopped
+    volumes:
+      - ./codeserver/config:/config
+    env_file:
+      - ./codeserver/.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.codeserver.rule=Host(`code.derooijtransportinfra.nl`)"
+      - "traefik.http.routers.codeserver.entrypoints=websecure"
+      - "traefik.http.routers.codeserver.tls=true"
+    networks:
+      - web
+
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: homeassistant
+    restart: unless-stopped
+    volumes:
+      - ./homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ha.rule=Host(`ha.derooijtransportinfra.nl`)"
+      - "traefik.http.routers.ha.entrypoints=websecure"
+      - "traefik.http.routers.ha.tls=true"
+      - "traefik.http.services.ha.loadbalancer.server.port=8123"
+    networks:
+      - web
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - web
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/grafana-data:/var/lib/grafana
+    env_file:
+      - ./monitoring/grafana.env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`monitor.derooijtransportinfra.nl`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls=true"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+    networks:
+      - web
+
+networks:
+  web:
+    driver: bridge
