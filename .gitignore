@@ -1,14 +1,13 @@
 # Traefik certificates
-traefik/certs/
-
-# Home Assistant
-homeassistant/
+traefik/certs/*.crt
+traefik/certs/*.key
 
 # Code Server config (contains user data & settings)
 codeserver/config/
 
 # Grafana data
 monitoring/grafana-data/
+monitoring/grafana.env
 
 # Misc
 .DS_Store

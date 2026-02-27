@@ -27,14 +27,13 @@ services:
     volumes:
       - ./glance/config:/app/config
       - ./glance/assets:/app/assets
-      - ./glance/secrets:/app/secrets
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PIHOLE_PASSWORD=${PIHOLE_PASSWORD}
       - OPENWEATHERMAP_API_KEY=${OPENWEATHERMAP_API_KEY}
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.glance.rule=Host(`dash.derooijtransportinfra.nl`)"
+      - "traefik.http.routers.glance.rule=Host(`dash.YOUR_DOMAIN_NAME`)"
       - "traefik.http.routers.glance.entrypoints=websecure"
       - "traefik.http.routers.glance.tls=true"
       - "traefik.http.services.glance.loadbalancer.server.port=8080"
@@ -51,7 +50,7 @@ services:
       - ./codeserver/.env
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.codeserver.rule=Host(`code.derooijtransportinfra.nl`)"
+      - "traefik.http.routers.codeserver.rule=Host(`code.YOUR_DOMAIN_NAME`)"
       - "traefik.http.routers.codeserver.entrypoints=websecure"
       - "traefik.http.routers.codeserver.tls=true"
     networks:
@@ -66,7 +65,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.ha.rule=Host(`ha.derooijtransportinfra.nl`)"
+      - "traefik.http.routers.ha.rule=Host(`ha.YOUR_DOMAIN_NAME`)"
       - "traefik.http.routers.ha.entrypoints=websecure"
       - "traefik.http.routers.ha.tls=true"
       - "traefik.http.services.ha.loadbalancer.server.port=8123"
@@ -92,7 +91,7 @@ services:
       - ./monitoring/grafana.env
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.grafana.rule=Host(`monitor.derooijtransportinfra.nl`)"
+      - "traefik.http.routers.grafana.rule=Host(`monitor.YOUR_DOMAIN_NAME`)"
       - "traefik.http.routers.grafana.entrypoints=websecure"
       - "traefik.http.routers.grafana.tls=true"
       - "traefik.http.services.grafana.loadbalancer.server.port=3000"
