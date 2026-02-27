@@ -31,6 +31,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     environment:
       - PIHOLE_PASSWORD=${PIHOLE_PASSWORD}
+      - OPENWEATHERMAP_API_KEY=${OPENWEATHERMAP_API_KEY}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.glance.rule=Host(`dash.derooijtransportinfra.nl`)"

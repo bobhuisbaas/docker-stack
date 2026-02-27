@@ -1,0 +1,15 @@
+# Traefik certificates
+traefik/certs/
+
+# Home Assistant
+homeassistant/
+
+# Code Server config (contains user data & settings)
+codeserver/config/
+
+# Grafana data
+monitoring/grafana-data/
+
+# Misc
+.DS_Store
+Thumbs.db

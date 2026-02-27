@@ -2,28 +2,28 @@
   width: wide
   hide-desktop-navigation: false
   center-vertically: true
-  
+
   #searchbar
   head-widgets:
     - type: search
       engine: duckduckgo
       newtab: true
       autofocus: true
-  
+
   columns:
-   
+
     - size: small
       widgets:
         - type: to-do
         - type: weather
           units: metric
-          location: Eindhoven, Noord-Brabant, NL
+          location: Eindhoven
           api-key: ${readFileFromEnv:/app/secrets/openweathermap_api_key}
 
       # middle column
     - size: full
       widgets:
-          # services monitor      
+          # services monitor
         - type: monitor
           cache: 1m
           title: Services
@@ -59,4 +59,4 @@
         - type: dns-stats
           service: pihole-v6
           url: https://pihole.derooijtransportinfra.nl
-          password: ${readFileFromEnv:/app/secrets/pihole_password}
+          password: ${PIHOLE_PASSWORD}
