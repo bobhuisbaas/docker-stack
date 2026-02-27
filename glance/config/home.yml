@@ -18,7 +18,7 @@
         - type: weather
           units: metric
           location: Eindhoven
-          api-key: ${readFileFromEnv:/app/secrets/openweathermap_api_key}
+          api-key: ${OPENWEATHERMAP_API_KEY}
 
       # middle column
     - size: full
@@ -29,16 +29,16 @@
           title: Services
           sites:
             - title: PiHole
-              url: https://pihole.derooijtransportinfra.nl/admin/
+              url: https://pihole.YOUR_DOMAIN_NAME/admin/
               icon: si:pihole
             - title: Code Server
-              url: https://code.derooijtransportinfra.nl
+              url: https://code.YOUR_DOMAIN_NAME
               icon: si:visualstudiocode
             - title: Home Assistant
-              url: https://ha.derooijtransportinfra.nl
+              url: https://ha.YOUR_DOMAIN_NAME
               icon: si:homeassistant
             - title: Grafana
-              url: https://monitor.derooijtransportinfra.nl
+              url: https://monitor.YOUR_DOMAIN_NAME
               icon: si:grafana
 
       # right column
@@ -58,5 +58,5 @@
           # dns stats
         - type: dns-stats
           service: pihole-v6
-          url: https://pihole.derooijtransportinfra.nl
+          url: https://pihole.YOUR_DOMAIN_NAME
           password: ${PIHOLE_PASSWORD}
